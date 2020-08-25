@@ -141,18 +141,38 @@ public class Board extends JPanel implements KeyListener, MouseListener, MouseMo
 		}, blocks.getSubimage(blockSize * 5, 0, blockSize, blockSize), this, 6);
 	}
 
+	private int playSound = 0;
+
+	private long restarttime = 0;
+
 	private void update() {
+		if (System.currentTimeMillis() < restarttime) {
+			return;
+		}
 		if (stopBounds.contains(mouseX, mouseY) && leftClick && !buttonLapse.isRunning() && !gameOver) {
 			buttonLapse.start();
 			gamePaused = !gamePaused;
 		}
 
-		if (refreshBounds.contains(mouseX, mouseY) && leftClick)
+		if (refreshBounds.contains(mouseX, mouseY) && leftClick) {
 			startGame();
+			restarttime = System.currentTimeMillis() + 1000;
+		}
+
+		if (gamePaused && playSound == 0) {
+			restarttime = System.currentTimeMillis() + 1000;
+			playSound = 1;
+		}
+
+		if (playSound == 1) {
+			player.playSound("/assets/pause.ogg");
+			playSound = 2;
+		}
 
 		if (gamePaused || gameOver) {
 			return;
 		}
+		playSound = 0;
 		getCurrentShape().update();
 	}
 
@@ -285,7 +305,7 @@ public class Board extends JPanel implements KeyListener, MouseListener, MouseMo
 		setCurrentShape();
 		gameOver = false;
 		looper.start();
-
+		player.playSound("/assets/start.ogg");
 	}
 
 	public void stopGame() {

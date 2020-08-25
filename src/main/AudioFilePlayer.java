@@ -12,7 +12,7 @@ import javazoom.spi.vorbis.sampled.file.VorbisAudioFileReader;
 public class AudioFilePlayer {
 
 	private void stream(AudioInputStream in, SourceDataLine line) throws IOException {
-		byte[] buffer = new byte[32];
+		byte[] buffer = new byte[64];
 		for (int n = 0; n != -1; n = in.read(buffer, 0, buffer.length)) {
 			line.write(buffer, 0, n);
 		}
