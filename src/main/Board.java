@@ -26,7 +26,8 @@ public class Board extends JPanel implements KeyListener, MouseListener, MouseMo
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private BufferedImage blocks, background, pause, refresh;
+	private BufferedImage[] blocks;
+	private BufferedImage background, pause, refresh;
 
 	// board dimensions (the playing area)
 
@@ -85,8 +86,11 @@ public class Board extends JPanel implements KeyListener, MouseListener, MouseMo
 
 	public Board() {
 		// load Assets
-		blocks = ImageLoader.loadImage("/assets/tiles.png");
-
+		blocks = new BufferedImage[] { ImageLoader.loadImage("/assets/1.png"), ImageLoader.loadImage("/assets/2.png"),
+				ImageLoader.loadImage("/assets/3.png"), ImageLoader.loadImage("/assets/4.png"),
+				ImageLoader.loadImage("/assets/5.png"), ImageLoader.loadImage("/assets/6.png"),
+				ImageLoader.loadImage("/assets/7.png"), };
+		System.out.println(blocks.length);
 		background = ImageLoader.loadImage("/assets/background.png");
 		pause = ImageLoader.loadImage("/assets/pause.png");
 		refresh = ImageLoader.loadImage("/assets/refresh.png");
@@ -108,37 +112,37 @@ public class Board extends JPanel implements KeyListener, MouseListener, MouseMo
 		// create shapes
 
 		shapes[0] = new Shape(new int[][] { { 1, 1, 1, 1 } // I shape;
-		}, blocks.getSubimage(0, 0, blockSize, blockSize), this, 1);
+		}, blocks[0], this, 1);
 
 		shapes[1] = new Shape(new int[][] { { 1, 1, 1 }, { 0, 1, 0 }, // T shape;
-		}, blocks.getSubimage(blockSize, 0, blockSize, blockSize), this, 2);
+		}, blocks[1], this, 2);
 
 		shapes[2] = new Shape(new int[][] { { 1, 1, 1 }, { 1, 0, 0 }, // L shape;
-		}, blocks.getSubimage(blockSize * 2, 0, blockSize, blockSize), this, 3);
+		}, blocks[2], this, 3);
 
 		shapes[3] = new Shape(new int[][] { { 1, 1, 1 }, { 0, 0, 1 }, // J shape;
-		}, blocks.getSubimage(blockSize * 3, 0, blockSize, blockSize), this, 4);
+		}, blocks[3], this, 4);
 
 		shapes[4] = new Shape(new int[][] { { 0, 1, 1 }, { 1, 1, 0 }, // S shape;
-		}, blocks.getSubimage(blockSize * 4, 0, blockSize, blockSize), this, 5);
+		}, blocks[4], this, 5);
 
 		shapes[5] = new Shape(new int[][] { { 1, 1, 0 }, { 0, 1, 1 }, // Z shape;
-		}, blocks.getSubimage(blockSize * 5, 0, blockSize, blockSize), this, 6);
+		}, blocks[5], this, 6);
 
 		shapes[6] = new Shape(new int[][] { { 1, 1 }, { 1, 1 }, // O shape;
-		}, blocks.getSubimage(blockSize * 6, 0, blockSize, blockSize), this, 7);
+		}, blocks[6], this, 7);
 
 		shapes[7] = new Shape(new int[][] { { 1, 1 }, { 1, 0, 0 }, // L shape;
-		}, blocks.getSubimage(blockSize * 2, 0, blockSize, blockSize), this, 3);
+		}, blocks[2], this, 3);
 
 		shapes[8] = new Shape(new int[][] { { 1, 1, 1 } // I shape;
-		}, blocks.getSubimage(0, 0, blockSize, blockSize), this, 1);
+		}, blocks[0], this, 1);
 
 		shapes[9] = new Shape(new int[][] { { 1, 1 } // I shape;
-		}, blocks.getSubimage(blockSize * 5, 0, blockSize, blockSize), this, 6);
+		}, blocks[5], this, 6);
 
 		shapes[10] = new Shape(new int[][] { { 1 } // . shape;
-		}, blocks.getSubimage(blockSize * 5, 0, blockSize, blockSize), this, 6);
+		}, blocks[5], this, 6);
 	}
 
 	private int playSound = 0;
@@ -183,11 +187,8 @@ public class Board extends JPanel implements KeyListener, MouseListener, MouseMo
 
 		for (int row = 0; row < board.length; row++) {
 			for (int col = 0; col < board[row].length; col++) {
-
 				if (board[row][col] != 0) {
-
-					g.drawImage(blocks.getSubimage((board[row][col] - 1) * blockSize, 0, blockSize, blockSize),
-							col * blockSize, row * blockSize, null);
+					g.drawImage(blocks[board[row][col] - 1], col * blockSize, row * blockSize, null);
 				}
 
 			}
