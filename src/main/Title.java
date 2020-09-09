@@ -30,6 +30,7 @@ public class Title extends JPanel implements MouseListener, MouseMotionListener{
 	private Timer timer;
 	
 	
+	public long start = System.currentTimeMillis();
 	public Title(Window window){
 		try {
 			title = ImageIO.read(Board.class.getResource("/assets/title.png"));
@@ -38,15 +39,30 @@ public class Title extends JPanel implements MouseListener, MouseMotionListener{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		timer = new Timer(1000/60, new ActionListener(){
-
+		Thread thread = new Thread() {
+			 public void run(){
+				 for(;;) {
+					 try {
+						Thread.sleep(7);
+						System.out.println(System.currentTimeMillis()-start);
+						repaint();
+						start = System.currentTimeMillis();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				 }
+			 }
+		};
+		thread.start();
+		timer = new Timer(1, new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println(System.currentTimeMillis()-start);
 				repaint();
+				start = System.currentTimeMillis();
 			}
-			
 		});
-		timer.start();
+		//timer.start();
 		mouseX = 0;
 		mouseY = 0;
 		
