@@ -65,7 +65,7 @@ public class Shape {
 		lastTime = System.currentTimeMillis();
 
 		if (collision) {
-			if (pause < 200) {
+			if (pause < 20) {
 				pause++;
 			} else {
 				if (!(y + 1 + coords.length > 20)) {
